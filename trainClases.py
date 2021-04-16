@@ -31,7 +31,7 @@ for test in listdir("busTest"):
 train=np.empty((numSedan+numBus,10000),np.float32)
 
 # Se crea otro vector para almacenar los vectores de prueba, 
-#	en este caso se almacenarán 4 objetos de la clase manzanas y 4 de la clase peras
+#	en este caso se almacenarán n objetos de la clase 0 y n de la clase 1
 test=np.empty((numTest+busTest,10000),np.float32)
 
 

@@ -20,7 +20,9 @@ kernel = np.ones((3,3),np.uint8)
 font = cv2.FONT_HERSHEY_SIMPLEX
 
 # Define the codec and create VideoWriter object
-fourcc = cv2.cv.CV_FOURCC(*'XVID')
+#fourcc = cv2.cv.CV_FOURCC(*'XVID') esta DEPRECATED en phyton3
+## ahora sustituimos por:
+fourcc = cv2.VideoWriter_fourcc(*'mpeg')
 cn = 0
 flag = 0
 
@@ -33,8 +35,10 @@ while(cap.isOpened()):
         car = car_cascade.detectMultiScale(gray, scaleFactor=1.2, minNeighbors=6, flags=cv2.CASCADE_SCALE_IMAGE, minSize=(80, 80), maxSize=(500,500))
         for (x,y,w,h) in car:
             cv2.rectangle(frame,(x,y),(x+w,y+h),(255,0,0),2)
-            cv2.putText(frame,'car',(x+w+10,y+h), font, 0.5, (100,255,0), 1, cv2.CV_AA)
-            cv2.putText(frame,str(cn),(x+w+10,y+h+10), font, 0.5, (100,255,0), 1, cv2.CV_AA)
+            #cv2.putText(frame,'car',(x+w+10,y+h), font, 0.5, (100,255,0), 1, cv2.CV_AA)
+            #cv2.putText(frame,str(cn),(x+w+10,y+h+10), font, 0.5, (100,255,0), 1, cv2.CV_AA)
+            cv2.putText(frame,'car',(x+w+10,y+h), font, 0.5, (100,255,0), 1, cv2.LINE_AA)
+            cv2.putText(frame,str(cn),(x+w+10,y+h+10), font, 0.5, (100,255,0), 1, cv2.LINE_AA)
             roi_color = frame[y:y+h, x:x+w]
             
             
@@ -72,8 +76,10 @@ while(cap.isOpened()):
             test = roi_gray.reshape(-1,10000).astype(np.float32)
         
             # Initiate kNN, train the data, then test it with test data for k=1
-            knn = cv2.KNearest()
-            knn.train(train,train_labels)
+            #deprecated
+            #knn = cv2.KNearest()
+            knn = cv2.ml.KNearest_create()
+            knn.train(train, train_labels)
             ret,result,neighbours,dist = knn.find_nearest(test,k=7)
             
             
