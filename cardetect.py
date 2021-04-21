@@ -12,6 +12,9 @@ with np.load('knn_data.npz') as data:
     print( data.files )
     train = data['train']
     train_labels = data['train_labels']
+    print(train_labels)
+    #train son las matrices con los datos
+    #train_labels son el valor de la clase (0 o 1)
     
 # clase 0 = sedan, clase 1 = bus
 
@@ -79,8 +82,10 @@ while(cap.isOpened()):
             #deprecated
             #knn = cv2.KNearest()
             knn = cv2.ml.KNearest_create()
-            knn.train(train, train_labels)
-            ret,result,neighbours,dist = knn.find_nearest(test,k=7)
+            #knn.train(train, train_labels)
+            knn.train(train, 0, train_labels) #0 es el layout ROW_SAMPLE
+            #ret,result,neighbours,dist = knn.find_nearest(test,k=7) #deprecated
+            ret,result,neighbours,dist = knn.findNearest(test, 7)
             
             
             
@@ -90,8 +95,9 @@ while(cap.isOpened()):
             print("result:",result)
             print("neighbours", neighbours)
             print("____________________")
-            
-            if result == 0:
+           
+
+            """if result == 0:
                 cv2.putText(frame,'Sedan',(x+w+10,y+h-20), font, 0.5, (0,255,0), 1, cv2.CV_AA)
                 cv2.putText(roi_color,'Sedan',(30,90), font, 0.5, (0,255,0), 1, cv2.CV_AA)
                 roi_color = cv2.resize(roi_color, (200,200))
@@ -102,7 +108,7 @@ while(cap.isOpened()):
                 roi_color = cv2.resize(roi_color, (200,200))
                 cv2.imshow('Autobus',roi_color)
                 
-            cn = cn+1
+            cn = cn+1"""
             
         
         cv2.imshow('frame',frame)
